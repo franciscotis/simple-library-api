@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("books")
 public class BookController {
@@ -22,7 +24,7 @@ private BookService bookService;
 
 
 @GetMapping
-public ResponseEntity<Page<BookResponseDTO>> getAllBooks(@PageableDefault(size=10, sort={"title"}) Pageable pagination){
+public ResponseEntity<Page<BookResponseDTO>> getAllBooks(@PageableDefault(size=10, sort={"title"}) Pageable pagination) throws IOException {
     var page = bookService.getAllBooks(pagination);
     return ResponseEntity.ok(page);
 }
@@ -34,7 +36,7 @@ public ResponseEntity show(@PathVariable Long id){
 }
 
 @PostMapping
-    public ResponseEntity store(@RequestBody @Valid BookRequestDTO bookRequest, UriComponentsBuilder uriBuilder){
+    public ResponseEntity store(@RequestBody @Valid BookRequestDTO bookRequest, UriComponentsBuilder uriBuilder) throws IOException {
         var book = bookService.store(bookRequest);
         var uri = uriBuilder.path("/books/{id}").buildAndExpand(book.getId()).toUri();
         return ResponseEntity.created(uri).body(book);

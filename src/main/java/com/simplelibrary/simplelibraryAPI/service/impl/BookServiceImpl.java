@@ -5,11 +5,16 @@ import com.simplelibrary.simplelibraryAPI.dto.BookResponseDTO;
 import com.simplelibrary.simplelibraryAPI.model.Book;
 import com.simplelibrary.simplelibraryAPI.repository.BookRepository;
 import com.simplelibrary.simplelibraryAPI.service.BookService;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -28,8 +33,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book store(BookRequestDTO bookRequest) {
+    public Book store(BookRequestDTO bookRequest) throws IOException {
         var book = new Book(bookRequest);
+        book.setRate(this.scrapRatings(book.getTitle()));
         bookRepository.save(book);
         return book;
     }
@@ -50,6 +56,29 @@ public class BookServiceImpl implements BookService {
 
     public long count(){
         return bookRepository.count();
+    }
+
+    private Double scrapRatings(String title) {
+        Double rating = Double.valueOf(0);
+        try{
+            String titleEdited = title.replace(" ","-");
+            Document doc = Jsoup.connect("https://www.skoob.com.br/"+titleEdited).get();
+            Elements info = doc.select( "div#resultadoBusca")
+                    .select("div.box_lista_busca_vertical")
+                    .select("div.detalhes")
+                    .select("a");
+            Element firstBook = info.first();
+            if(firstBook != null){
+                Document book = Jsoup.connect("https://www.skoob.com.br/"+firstBook.attr("href")).get();
+                Elements ratingElement = book.select("div#pg-livro-box-rating")
+                        .select("span.rating");
+                rating = Double.parseDouble(ratingElement.text());
+            }
+        }catch (Exception e){
+        }
+        finally {
+            return rating;
+        }
     }
 
 }
