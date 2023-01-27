@@ -2,11 +2,7 @@ package com.simplelibrary.simplelibraryAPI.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simplelibrary.simplelibraryAPI.factory.BookFakerFactory;
-import com.simplelibrary.simplelibraryAPI.model.Book;
 import com.simplelibrary.simplelibraryAPI.repository.BookRepository;
-import com.simplelibrary.simplelibraryAPI.service.BookService;
-import org.assertj.core.api.Assertions;
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,10 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
@@ -49,12 +43,8 @@ public class BookControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        String headerLocation = result.getResponse().getHeader("Location");
         String content = result.getResponse().getContentAsString();
-        Book bookResp = new ObjectMapper().readValue(content, Book.class);
         assertNotNull(content);
-//        var uri = "/books/"+bookResp.getId().toString();
-//        assertEquals(headerLocation, uri.toString());
 
     }
 

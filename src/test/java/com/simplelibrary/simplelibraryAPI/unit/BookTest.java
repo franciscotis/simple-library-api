@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.IOException;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class BookTest {
 

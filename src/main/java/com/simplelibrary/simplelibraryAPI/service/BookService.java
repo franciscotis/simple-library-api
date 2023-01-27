@@ -22,8 +22,6 @@ public interface BookService {
 
     public long count();
 
-
-
 }
 
 
