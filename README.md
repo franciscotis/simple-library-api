@@ -1,6 +1,6 @@
 # Simple Library API :book:
 
-Repository with the content of the 5-parts Spring Boot tutorial available [HERE](http://link "HERE")
+Repository with the content of the 5-parts Spring Boot tutorial available [HERE](https://dev.to/franciscotis/creating-a-rest-api-using-spring-boot-tests-documentation-part-01-2262)
 
 ### System routes
 
